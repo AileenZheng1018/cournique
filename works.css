@@ -1,0 +1,458 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;  /* ✅ 禁止横向滚动 */
+}
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none; /* 若图像不需交互可添加 */
+}
+
+
+/* 加载像素字体（可选） */
+@font-face {
+  font-family: 'FusionPixelCN';
+  src: url('fusionpixel-hans.woff2') format('woff2');
+  font-display: swap;
+}
+
+.current-tag-label {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  font-family: 'FusionPixelCN', monospace;
+  font-size: 22px;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 255, 224, 0.5);
+  background: none;
+  padding: 4px 10px;
+  border-radius: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* 背景图容器 */
+.background-container {
+  position: fixed;      /* ✅ 关键修改：固定在视口 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;          /* ✅ 保证在最底层 */
+  overflow: hidden;
+}
+
+.background-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 面部互动区域 */
+.face-area {
+  position: absolute;
+  width: 8%;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+
+.face-highlight {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(0, 255, 224, 0.7);
+  box-shadow: 0 0 10px rgba(0, 255, 224, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: auto;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.face-info {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 10px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #00ffe0;
+  font-family: "Press Start 2P", monospace;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.face-highlight:hover {
+  opacity: 1;
+}
+
+.face-highlight:hover + .face-info {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 可选动画 */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 4px #00ffe0;
+  }
+  50% {
+    box-shadow: 0 0 12px #00ffe0;
+  }
+  100% {
+    box-shadow: 0 0 4px #00ffe0;
+  }
+}
+
+/* 作品页面主容器 */
+.works-container {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  transition: transform 0.3s ease, border-radius 0.3s ease;
+  width: 85vw;
+  max-width: 1200px;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 25px rgba(0, 255, 224, 0.15);
+
+  border-radius: 20px 20px 0 0; /* 初始只有上圆角 */
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #cdecec;
+  font-family: 'FusionPixelCN', monospace;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  bottom: 0; /* 保证从底部贴起 */
+  z-index: 2;
+  
+  will-change: transform;
+}
+
+/* 滚动到底：加上底部圆角并“浮起” */
+.works-container.round-bottom {
+  border-radius: 50px;
+  bottom: 50px; /* 向上浮起，露出圆角和缝隙 */
+}
+
+
+.works-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.works-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 255, 224, 0.2);
+  border-radius: 4px;
+}
+
+/* 作品网格区域 */
+.works-grid {
+  column-count: 4;
+  column-gap: 20px;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 1200px) {
+  .works-grid {
+    column-count: 3;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .works-grid {
+    column-count: 2;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .works-grid {
+    column-count: 1;
+  }
+}
+
+/* 单个作品项 */
+.work-item {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.04);
+  padding: 6px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 255, 224, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  /* 移除固定宽度！*/
+  width: auto;
+  max-width: 100%;
+
+  /* 允许每张图自然大小，防止全部等宽 */
+  display: inline-block;
+  
+  margin-bottom: 20px;
+}
+
+.work-item img {
+  width: 100%;
+  height: auto;
+  image-rendering: OptimizeSpeed;     /* 或 auto, crisp-edges 视需求 */
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0px;
+  break-inside: avoid;  /* 防止 item 被截断在两列间 */
+}
+
+.work-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 224, 0.3);
+}
+
+/* ========== 新增：全屏图片展示 ========== */
+/* 全屏图片容器外壳 */
+/* 全屏弹窗背景层 */
+/* ✅ 修复弹窗图片尺寸、位置、滚动问题 */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body.popup-open {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* 弹窗背景遮罩 */
+.work-popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  overflow: hidden;
+}
+
+.popup-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;  /* ✅ 居中 */
+  align-items: center;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  transition: transform 0.5s ease;
+}
+
+.popup-image-container.image-slide-left {
+  transform: translateX(-180px); /* ✅ 比如向左滑 180px 就足够 */
+}
+
+.popup-img {
+  cursor: none;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: auto;
+}
+
+.text-icon {
+  position: absolute;
+  top: 20px; /* 你也可以改成 top: 20px; */
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  background-image: url('iconfont/Text.png'); /* 替代 src */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10000;
+  cursor: pointer;
+}
+
+.text-icon.active {
+  filter: drop-shadow(0 0 10px red);
+  transform: translateX(-400px); /* 跟随滑动 */
+}
+
+.text-title {
+  font-weight: bold;
+  font-size: 19px;
+  margin-bottom: 20px;
+  color: #ffdddd; /* 或自定义颜色 */
+}
+
+.text-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+  margin-bottom: 10px;
+}
+
+.text-box {
+  position: absolute;
+  top: 0;
+  right: -350px;
+  width: 360px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  font-family: 'FusionPixelCN', monospace;
+  color: #00ffe0;
+  font-size: 13px;
+  padding: 20px;
+  line-height: 1.6;
+  overflow-y: auto;        /* ✅ 允许纵向滚动 */
+  overflow-x: hidden;      /* ✅ 禁止横向滚动 */
+  white-space: pre-wrap;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  z-index: 2;
+  pointer-events: none;
+  scrollbar-width: thin;   /* Firefox */
+  scrollbar-color: #00ffe0 rgba(0, 255, 224, 0.15); /* Firefox */
+}
+
+/* ✅ 滚动条美化（WebKit） */
+.text-box::-webkit-scrollbar {
+  width: 6px;
+}
+.text-box::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 255, 224, 0.3);
+  border-radius: 3px;
+}
+.text-box::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+
+.text-box.active {
+  transform: translateX(-360px);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background-color: #00ffe0;
+  margin-left: 4px;
+  animation: blink 1s steps(1) infinite;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+
+/* 自定义伪鼠标光标容器 */
+#custom-cursor {
+  position: fixed;
+  width: 22px;
+  height: 22px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none; /* 避免干扰鼠标操作 */
+  z-index: 9999;
+  display: none; /* 初始不显示 */
+  animation: cursor-glow 1.5s infinite ease-in-out;
+}
+
+/* 左箭头样式 */
+#custom-cursor.left {
+  background-image: url('/iconfont/LArrow.png');
+}
+
+/* 右箭头样式 */
+#custom-cursor.right {
+  background-image: url('/iconfont/RArrow.png');
+}
+
+/* 发光动画 */
+@keyframes cursor-glow {
+  0%   { filter: drop-shadow(0 0 2px rgba(0,255,224,0.5)); }
+  50%  { filter: drop-shadow(0 0 8px rgba(0,255,224,1)); }
+  100% { filter: drop-shadow(0 0 2px rgba(0,255,224,0.5)); }
+}
+
+.back-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'FusionPixelCN', monospace, sans-serif; /* 像素字体 */
+  font-size: 14px;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 255, 224, 0.5);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+  text-align: center;
+  z-index: 9999;
+  text-decoration: none;
+  user-select: none;
+}
+
+.time-label {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-family: 'PixelFont', monospace; /* 或你实际用的像素字体 */
+  font-size: 14px;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 255, 224, 0.5);
+  padding: 1px 4px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.tag-sidebar {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: white;
+  font-family: 'FusionPixelCN', monospace;
+  font-size: 12px;
+  text-shadow: 0 0 6px #00ffe0;
+  z-index: 9000;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.tag-label-title {
+  font-weight: bold;
+  color: #00ffe0;
+  margin-bottom: 6px;
+}
+
+.tag-label-name {
+  white-space: pre-wrap;
+}

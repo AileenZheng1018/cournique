@@ -1,0 +1,313 @@
+/* 页面基础 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  color: #cdecec;
+  background: none;
+  overflow-x: hidden;
+}
+
+/* 加载像素字体（可选） */
+@font-face {
+  font-family: 'FusionPixelCN';
+  src: url('fusionpixel-hans.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* 背景图容器 */
+.background-container {
+  position: fixed;      /* ✅ 关键修改：固定在视口 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;          /* ✅ 保证在最底层 */
+  overflow: hidden;
+}
+
+.background-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 面部互动区域 */
+.face-area {
+  position: absolute;
+  width: 8%;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;   /* ❗️使整个区域不响应鼠标 */
+}
+
+/* 蓝框本身是唯一可响应 hover 的区域 */
+.face-highlight {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(0, 255, 224, 0.7);
+  box-shadow: 0 0 10px rgba(0, 255, 224, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: auto;    /* ✅ 只有蓝框可响应鼠标 */
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+/* 信息框放在蓝框右边，但不参与 hover */
+.face-info {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 10px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #00ffe0;
+  font-family: "Press Start 2P", monospace;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+  pointer-events: none;   /* ❗️不能响应鼠标事件 */
+}
+
+/* 只有鼠标 hover 蓝框时才触发显示信息框 */
+.face-highlight:hover {
+  opacity: 1;
+}
+
+.face-highlight:hover + .face-info {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+/* 可选动画 */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 4px #00ffe0;
+  }
+  50% {
+    box-shadow: 0 0 12px #00ffe0;
+  }
+  100% {
+    box-shadow: 0 0 4px #00ffe0;
+  }
+}
+
+/* 中央半透明内容盒 */
+/* ✅ 中央透明框完全居中 */
+.center-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 15px;
+  width: 70vw;
+  max-width: 950px;
+  box-shadow: 0 0 30px rgba(0, 255, 224, 0.15);
+}
+
+/* LOGO 样式 */
+.logo-banner {
+  width: 90%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px auto;
+  filter: drop-shadow(0 0 10px #00ffe0);
+}
+
+.logo-wrapper {
+  position: relative;
+  width: 300px; /* 你的logo宽度 */
+  margin: 0 auto;
+}
+
+.logo-wrapper img {
+  width: 100%;
+  display: block;
+}
+
+@keyframes redGlow {
+  0%, 100% {
+    opacity: 0;
+    filter: drop-shadow(0 0 0px red);
+  }
+  25% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 20px red);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 40px #ff1a1a);
+  }
+  75% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 20px red);
+  }
+}
+
+.logo-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  animation: redGlow 0.8s infinite;
+  z-index: 2;
+  
+  filter:
+  drop-shadow(0 0 15px #ff1a1a)
+  drop-shadow(0 0 25px #ff1a1a)
+  saturate(180%);
+}
+
+
+/* 搜索框 */
+.search-box input {
+  padding: 15px 20px;
+  font-size: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #00ffe0;
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 1px;
+  box-shadow:
+    0 0 10px rgba(0, 255, 224, 0.25),
+    inset 0 0 5px rgba(0, 255, 224, 0.1);
+  transition: box-shadow 0.3s, background-color 0.3s;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 6px #ff4e4e;
+  letter-spacing: 2px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* 菜单包裹容器（控制整体滑出） */
+.menu-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 0;
+  height: calc(100vh - 40px);
+  width: 290px; /* 250(menu) + 40(icon) */
+  transform: translateX(250px);  /* 一开始导航栏隐藏，只露出iconfont */
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: row-reverse;
+  z-index: 100;
+}
+
+.menu-wrapper.active {
+  transform: translateX(0);
+}
+
+.menu-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #00ffe0;
+  font-size: 24px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 255, 224, 0.6);
+  border-radius: 6px 0 0 6px;
+  margin-right: 0;
+}
+
+.side-menu {
+  width: 250px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: -2px 0 10px rgba(0,255,224,0.3);
+  padding: 20px;
+  color: #cdecec;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 导航标题文字（导航） */
+.side-menu h3 {
+  margin-top: 0;
+  font-size: 1.3em;
+  color: #00ffe0;
+  text-shadow: 0 0 10px #00ffe0;
+  font-family: 'FusionPixelCN', monospace;
+}
+
+/* 顶层菜单项（种类 / 活动 / Paro） */
+.menu-item {
+  margin: 15px 0;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.3s;
+  font-family: 'FusionPixelCN', monospace;
+  font-size: 1em;
+}
+
+/* hover 效果 */
+.menu-item:hover {
+  color: #ff4e4e;
+  text-shadow: 0 0 6px #ff4e4e;
+}
+
+/* 激活状态 */
+.menu-item.active {
+  color: #00ffe0;
+  text-shadow: 0 0 6px #00ffe0;
+}
+
+/* 子菜单容器：默认隐藏 */
+.menu-subgroup {
+  display: none;
+  margin-top: 10px;
+}
+
+/* 子菜单项（点击展开后看到的子项） */
+.menu-subitem {
+  margin: 8px 0 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #cdecec;
+  transition: color 0.3s;
+  font-family: 'FusionPixelCN', monospace;
+}
+
+.menu-subitem:hover {
+  color: #ff4e4e;
+  text-shadow: 0 0 6px #ff4e4e;
+}
+
+/* 返回按钮样式 */
+.menu-back {
+  position: absolute;
+  bottom: 20px;
+  left: 50px;
+  font-size: 0.75em;
+  color: #00ffe0;
+  cursor: pointer;
+  font-family: 'FusionPixelCN', monospace;
+  text-shadow: 0 0 8px #00ffe0;
+  display: none; /* 初始隐藏 */
+}
+
+.menu-back:hover {
+  color: #ff4e4e;
+  text-shadow: 0 0 6px #ff4e4e;
+}

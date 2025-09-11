@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Gocha - 詩島剛 × チェイス</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unifoundry.com/unifont/?utm_source=chatgpt.com">
+</head>
+<body>
+  <!-- 菜单包裹：侧边菜单 + iconfont -->
+  <!-- 包裹导航栏和iconfont的容器，一开始关闭状态 -->
+  <div class="menu-wrapper" onmouseleave="hideMenu()">
+    <div class="side-menu">
+      <!-- 顶层菜单 -->
+      <div class="menu-item" onclick="toggleSubmenu('category')">种类</div>
+      <div class="menu-item" onclick="toggleSubmenu('event')">活动</div>
+      <div class="menu-item" onclick="toggleSubmenu('paro')">Paro</div>
+      <div class="menu-item" onclick="toggleSubmenu('special')">特殊</div>
+      
+      <!-- 子菜单组：默认隐藏 -->
+      <div class="menu-subgroup" id="submenu-category">
+        <div class="menu-subitem" data-tag="插图">插图</div>
+        <div class="menu-subitem" data-tag="漫图">漫图</div>
+        <div class="menu-subitem" data-tag="黑白图">黑白图</div>
+        <div class="menu-subitem" data-tag="Q版">Q版</div>
+        <div class="menu-subitem" data-tag="设定图">设定图</div>
+        <div class="menu-subitem" data-tag="小说">小说</div>
+      </div>
+      
+      <div class="menu-subgroup" id="submenu-event">
+        <div class="menu-subitem" data-tag="「刚切中元节24h」「夢廻の町」">「刚切中元节24h」「夢廻の町」</div>
+        <div class="menu-subitem" data-tag="其他">其他</div>
+      </div>
+      
+      <div class="menu-subgroup" id="submenu-paro">
+        <div class="menu-subitem" data-tag="原著">原著</div>
+        <div class="menu-subitem" data-tag="骑士与龙">骑士与龙</div>
+        <div class="menu-subitem" data-tag="哨兵与向导">哨兵与向导</div>
+        <div class="menu-subitem" data-tag="校园">校园</div>
+        <div class="menu-subitem" data-tag="少女革命">少女革命</div>
+        <div class="menu-subitem" data-tag="性别转换">性别转换</div>
+        <div class="menu-subitem" data-tag="赛博特工">赛博特工</div>
+      </div>
+      
+      <div class="menu-subgroup" id="submenu-special">
+        <div class="menu-subitem" data-tag="R向">R向</div>
+        <div class="menu-subitem" data-tag="G向">G向</div>
+        <div class="menu-subitem" data-tag="皮套">皮套</div>
+      </div>
+    </div>
+    <span class="menu-icon" onclick="toggleMenu()">☰</span>
+    <div class="menu-back" onclick="showTopLevel()" style="display: none;">← 返回</div>
+  </div>
+
+  <div class="background-container">
+    <img src="lab_bg.jpg" class="background-img" alt="Lab Background" />
+  
+    <!-- Go -->
+    <div class="face-area" style="top: 12.4%; left: 36.2%;">
+      <div class="face-highlight"></div>
+      <div class="face-info">
+        <p>Target: Go Shijima</p>
+        <p>Species: Homo Sapiens</p>
+        <p>Gender: M</p>
+        <p>Mood: panic stressful</p>
+      </div>
+    </div>
+  
+    <!-- Chase -->
+    <div class="face-area" style="top: 33.2%; left: 60.4%;">
+      <div class="face-highlight"></div>
+      <div class="face-info">
+        <p>Target: Chase</p>
+        <p>Species: Roidmude</p>
+        <p>Gender: N/A</p>
+        <p>Mood: joy</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 页面中央内容 -->
+  <div class="center-box">
+    <div class="logo-wrapper">
+      <img src="cournique-logo.PNG" class="logo-base" alt="Logo base" />
+      <img src="logo-red-glow.png" class="logo-glow" alt="Logo glow" />
+    </div>
+    <div class="search-box">
+      <input type="text" id="typewriter" placeholder="" />
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
