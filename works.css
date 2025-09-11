@@ -386,12 +386,12 @@ body.popup-open {
 
 /* 左箭头样式 */
 #custom-cursor.left {
-  background-image: url('iconfont/LArrow.png');
+  background-image: url('/iconfont/LArrow.png');
 }
 
 /* 右箭头样式 */
 #custom-cursor.right {
-  background-image: url('iconfont/RArrow.png');
+  background-image: url('/iconfont/RArrow.png');
 }
 
 /* 发光动画 */
