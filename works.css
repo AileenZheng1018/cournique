@@ -315,11 +315,14 @@ body.popup-open {
   right: -350px;
   width: 360px;
   height: 100%;
+  max-height: 100vh;
+  box-sizing: border-box;  /* 防止 padding 导致内容计算异常 */
   background-color: rgba(0, 0, 0, 0.85);
   font-family: 'FusionPixelCN', monospace;
   color: #00ffe0;
   font-size: 13px;
   padding: 20px;
+  padding-bottom: 2rem; /* 给最后一行留出空间 */
   line-height: 1.6;
   overflow-y: auto;        /* ✅ 允许纵向滚动 */
   overflow-x: hidden;      /* ✅ 禁止横向滚动 */
