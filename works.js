@@ -38,49 +38,93 @@ let currentSelectedTag = null;
 
 let typingInterrupted = false;  // 控制是否跳过打字动画
 
+function preloadAllImagesThenShow(callback) {
+  const images = Array.from(document.querySelectorAll('.work-item img'));
+  let loaded = 0;
+
+  if (images.length === 0) {
+    finishLoading();
+    return;
+  }
+
+  images.forEach(img => {
+    const realSrc = img.dataset.src || img.src; // 支持已设置 src
+    const temp = new Image();
+    temp.onload = check;
+    temp.onerror = check;
+    temp.src = realSrc;
+  });
+
+  function check() {
+    loaded++;
+    if (loaded >= images.length) {
+      finishLoading();
+    }
+  }
+
+  function finishLoading() {
+    document.getElementById('loading-screen').style.display = 'none';
+    document.querySelector('.works-container').style.visibility = 'visible';
+    if (callback) callback();
+  }
+}
+
 // ✅ 筛选作品 & 添加时间标签
 window.onload = function () {
-  const hash = window.location.hash;
-  const selectedTag = hash.startsWith("#tag=") ? decodeURIComponent(hash.slice(5)) : null;
-  currentSelectedTag = selectedTag;
-  console.log("选中的 tag:", selectedTag);
+  // 首先隐藏内容，显示 loading
+  document.querySelector('.works-container').style.visibility = 'hidden';
+  document.getElementById('loading-screen').style.display = 'flex';
 
-  document.querySelectorAll('.work-item').forEach(item => {
-    let tags = [];
-    try {
-      tags = JSON.parse(item.dataset.tags);
-      console.log("此项的 tags:", tags);
-    } catch (e) {
-      console.error('data-tags 格式错误：', item.dataset.tags);
-    }
+  // 等所有作品图片加载完成后执行主逻辑
+  preloadAllImagesThenShow(() => {
+    const hash = window.location.hash;
+    const selectedTag = hash.startsWith("#tag=") ? decodeURIComponent(hash.slice(5)) : null;
+    currentSelectedTag = selectedTag;
+    console.log("选中的 tag:", selectedTag);
 
-    if (!selectedTag || tags.map(t => t.trim()).includes(selectedTag.trim())) {
-      item.style.display = 'block';
-
-      // ✅ 添加时间标签（仅对特定 tag）
-      if (selectedTag === '「刚切中元节24h」「夢廻の町」') {
-        const id = item.dataset.id || '';
-        if (id.startsWith('1-') && !item.querySelector('.time-label')) {
-          const parts = id.split('-');
-          if (parts.length >= 3) {
-            const hour = parts[1].padStart(2, '0');
-            const min = parts[2].padStart(2, '0');
-            const time = `${hour}:${min}`;
-            const timeLabel = document.createElement('div');
-            timeLabel.className = 'time-label';
-            timeLabel.textContent = time;
-            item.appendChild(timeLabel);
-          }
-        }
+    document.querySelectorAll('.work-item').forEach(item => {
+      let tags = [];
+      try {
+        tags = JSON.parse(item.dataset.tags);
+        console.log("此项的 tags:", tags);
+      } catch (e) {
+        console.error('data-tags 格式错误：', item.dataset.tags);
       }
 
-    } else {
-      item.style.display = 'none';
-    }
+      if (!selectedTag || tags.map(t => t.trim()).includes(selectedTag.trim())) {
+        item.style.display = 'block';
+
+        // ✅ 添加时间标签（仅对特定 tag）
+        if (selectedTag === '「刚切中元节24h」「夢廻の町」') {
+          const id = item.dataset.id || '';
+          if (id.startsWith('1-') && !item.querySelector('.time-label')) {
+            const parts = id.split('-');
+            if (parts.length >= 3) {
+              const hour = parts[1].padStart(2, '0');
+              const min = parts[2].padStart(2, '0');
+              const time = `${hour}:${min}`;
+              const timeLabel = document.createElement('div');
+              timeLabel.className = 'time-label';
+              timeLabel.textContent = time;
+              item.appendChild(timeLabel);
+            }
+          }
+        }
+
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    // ✅ 显示页面主体，隐藏 loading
+    document.querySelector('.works-container').style.visibility = 'visible';
+    document.getElementById('loading-screen').style.display = 'none';
+
+    // ✅ 执行原本回调
+    checkVisibleItems();
   });
-  
-  checkVisibleItems();
 };
+
 
 
 // ✅ 弹窗逻辑
