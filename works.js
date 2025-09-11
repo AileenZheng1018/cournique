@@ -25,6 +25,8 @@ const descriptions = {
   '1-22-00':`「刚切中元节24h」「夢廻の町 22:00」\n\n有时候，我会想这样的事情。\n所以现在这样也不奇怪。\n明明总是在脑子里反复地想、一遍遍假设。我没办法控制自己的身体的时候，第一件事情居然是毫不犹豫地扑了上去。\nChase被我扑倒在地上。\n我怀疑他的后脑勺可能会很痛——我在想什么呢？他可是个铁皮人。\n他看着我，表情居然有些茫然。\n我有些想骂他笨蛋，但是这不由我控制。\n直到看到一滴水落在Chase的脸颊上，我才后知后觉自己居然哭了。\n真是没出息。我在心里忍不住哼了一声。`,
   '1-23-00':`「刚切中元节24h」「夢廻の町 23:00」\n\n我知道这没有必要。\n但还是忍不住总是扭头去盯着Chase看。\n希望姐姐和进哥不要对此说什么，但是这也是没办法的事情。这是这个笨蛋Roidmude第一次吃烤肉。他好像很兴奋。我不知道自己有什么感想，可能有点紧张，大概有些期待。\n此刻是紧张。\n这个版本落后的机器人，真怕他出什么岔子。\n幸好只有我们四个，就算有什么问题——那也不会是什么问题。\n姐姐给我倒了一杯果汁。\n我抬头，下意识接过来：“姐姐，我早就不是小孩子了。”\n姐姐轻飘飘地笑了笑，一看就知道压根没把我的话放在心上。进哥也笑了起来——不知道这对夫妻什么意思。\n这两位刑警先生刚下班，听说我和Chase回到日本，说什么也要一起吃顿饭。\n英志去同学家玩了，所以没有一起来。\n我听了还有些惊奇。往常这小子最是对Chase感兴趣，以前的时候就经常缠着我问东问西。那个时候他还不知道，他心心念念的“舅舅的那个一直在旅行的朋友”，长了一张和“狩野叔叔”一模一样的可怕的木头脸。\n说到狩野——\n“欸，那不是狩野吗？”\n我这么一说，姐姐和进哥同时转头去看。\n只见狩野也一副刚下班的样子，西装外套抱在臂弯里，神色还是一如既往的严肃。\n他来这里干什么？不像他。\n进哥却冲他招手：“洸一，你怎么迟到了？不像你啊。”\n——啊，叫他干嘛？\n我撇了撇嘴，扭过头不再去看。烤盘上两块肉冒着恰到好处的香气。一块被姐姐夹走塞进了嘴里，另一块被我眼疾手快抢走。我转头看了看Chase，他正襟危坐，看上去和这里格格不入。我忍不住笑起来，举着筷子要他赶紧把肉吃了，多了一个刚下班的成年人来，等下可就更不好抢肉了。`,
   '1-24-00':`「刚切中元节24h」「夢廻の町 24:00」\n\n死亡是严寒的黑夜。\n生命是闷热的白天。\n天黑了，我进入梦乡，\n白天使我很疲惫。\n\n你那紫罗兰的明眸，\n日夜在我面前浮起，\n这可爱的碧色之迷，\n我弄不懂它的意义。`,
+  '0-1':`——刚生气了吗？\n“刚，你生气了吗？”\n“……没有！”\n——刚为什么生气？\n\n——这个Roidmude是白痴吗？！`,
+  '0-2-1':`刚很喜欢在我坐着的时候突然走过来。他会一言不发地坐到我身边，然后看看我——不是看我的脸部，他会瞄瞄我的肩膀和我的腿，微微皱着眉，然后挪一挪自己的位置。接着他松开眉头，会露出一个有些轻松的表情，然后“唰”地放松上半身，向我的方向倒过来。\n第一次刚这样做的时候，我非常紧张。虽然从刚的表情来看，他大概处于一种愉悦的情绪里，但是骤然倒身在我的数据库中，更类同于受伤时的反应。但是下一秒，刚的脑袋搁在了我的大腿上。\n我有些担心。因为紧张，我的腿部肌肉处于紧绷的状态，这样和刚的脑袋碰撞到一起，大概是很不舒服的。\n刚的表情却显得更加愉快了。\n\n这样的事情发生的次数多了之后，刚开始直接命令我：“Chase，你坐下。”我就明白他想要做什么。\n他也不太瞄着我调整位置，而是坐下后就倒到我的腿上。\n我低头就能看到他的脸。他总是笑着，看到他这样的笑容，我的核心总是微微的发烫，某种类似人类的多巴胺的数据流会充斥我的处理器。我有时候因此去摸刚的卷发，刚看上去会更高兴了。他喜欢叽叽喳喳地说话，内容无法预测，总是天南地北地东拉西扯。\n我不知道这种时候我的表情是什么样子的，但是刚看着我的眼神那样美丽，想来一定是个不错的表情。`,
 };
 
 // ✅ 全局变量记录当前选中的 tag
@@ -142,9 +144,7 @@ popupImg.addEventListener('click', (e) => {
 textIcon.addEventListener('click', () => {
   if (!textVisible) {
     const full = descriptions[currentId] || '';
-    const showAll = currentSelectedTag === "「刚切中元节24h」「夢廻の町」";
-    const finalText = showAll ? full : stripHeader(full);
-    typeText(finalText);
+    typeText(full);
     textBox.classList.add('active');
     textIcon.classList.add('active');
     imageContainer.classList.add('image-slide-left');
@@ -159,11 +159,17 @@ textIcon.addEventListener('click', () => {
 
 function typeText(text) {
   textBox.innerHTML = '';
-  let title = '';
   const lines = text.split('\n');
 
-  if (lines.length && lines[0].startsWith('「刚切中元节24h」') && currentSelectedTag === "「刚切中元节24h」「夢廻の町」") {
-    title = lines.shift();
+  const isTargetTag = currentSelectedTag === "「刚切中元节24h」「夢廻の町」";
+  const hasTargetTag = currentTags.includes("「刚切中元节24h」「夢廻の町」");
+
+  let title = '';
+
+  // ✅ 情况 1：作品有特殊 tag 且当前显示的 tag 也为特殊 tag
+  if (hasTargetTag && isTargetTag && lines.length && lines[0].startsWith('「刚切中元节24h」')) {
+    title = lines.shift(); // 移除第一行作为标题
+
     const titleEl = document.createElement('div');
     titleEl.className = 'text-title';
     titleEl.textContent = title;
@@ -174,6 +180,13 @@ function typeText(text) {
     textBox.appendChild(divider);
   }
 
+  // ✅ 情况 2：作品有特殊 tag 但当前不是特殊 tag → 跳过第一行
+  else if (hasTargetTag && !isTargetTag) {
+    lines.shift(); // 删除第一行但不渲染
+  }
+
+  // ✅ 其他情况：不动第一行，直接渲染所有文字
+
   const textContainer = document.createElement('div');
   textBox.appendChild(textContainer);
 
@@ -183,6 +196,7 @@ function typeText(text) {
 
   const fullText = lines.join('\n');
   let i = 0;
+
   function printChar() {
     if (i < fullText.length) {
       const ch = fullText[i];
@@ -199,6 +213,7 @@ function typeText(text) {
       cursor.remove();
     }
   }
+
   printChar();
 }
 
