@@ -483,3 +483,98 @@ body.popup-open {
 .tag-label-name {
   white-space: pre-wrap;
 }
+
+/* ✅ 保持 .work-item 为相对定位容器 */
+.work-item {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* ✅ 模糊图像包裹层 */
+.work-item .blur-wrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ✅ 只对 .blur-wrapper img 应用模糊与缩放 */
+.work-item.blurred .blur-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(20px);
+  transform: scale(1);
+  border-radius: 1rem;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+/* ✅ hover 放大 + 发光（不影响 icon） */
+.work-item:hover .blur-wrapper img {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+/* ✅ 警告 icon 容器，固定在右下角，浮在模糊图外 */
+.warning-icons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ✅ PNG 图标尺寸、发光、像素清晰 */
+.warning-icons img {
+  width: 34px;
+  height: 34px;
+  display: block;
+  image-rendering: auto;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 224, 0.5));
+  pointer-events: none;
+}
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 99999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-box {
+  background: #222;
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.confirm-buttons {
+  margin-top: 12px;
+}
+
+.confirm-buttons button {
+  margin: 0 10px;
+  padding: 6px 16px;
+  background: #444;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.confirm-buttons button:hover {
+  background: #666;
+}

@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="works.css" />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   </head>
-  <body oncontextmenu="return false">
+  <body>
     <div id="loading-screen">
       <img src="loading.gif" alt="加载中...">
     </div>
-
+    
     <div id="current-tag" class="current-tag-label"></div>
     
     <div class="background-container">
@@ -39,8 +39,17 @@
       </div>
     </div>
 
+    <div id="age-confirm-overlay" class="confirm-overlay" style="display: none;">
+      <div class="confirm-box">
+        <p>该作品含有限制内容。你已年满 18 岁吗？</p>
+        <div class="confirm-buttons">
+          <button id="age-yes">是的</button>
+          <button id="age-no">不是</button>
+        </div>
+      </div>
+    </div>
     
-    <div class="works-container">
+    <div class="works-container" oncontextmenu="return false">
       <!-- 可加一个筛选区域 -->
       <!-- <div class="works-filter"> ... </div> -->
 

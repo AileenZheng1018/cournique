@@ -33,101 +33,11 @@ const descriptions = {
   '0-5':`距离第一次全球性冻结事件已经过去了十一年，距离第二次全球性冻结事件也已经过去了十年。\n时间居然能过去得这么快又这么慢。现在回忆起来，那一年大家本应如此心惊胆战地度过。可是，正是因为先后出现的那三位假面骑士，我们所有人才能安稳度日，从死亡的命运里逃脱，然后活到现在，庆祝和平的第十年。\n\n听说警视厅为了庆祝十年前的胜利——或者说得更恰当一些，纪念这个社会恢复平和的第十年，推出了不少活动。同事说，不过是有些缺钱了而已。我没有回应，但是心里其实相当赞同他的话。只是，我虽然赞同他的说法，却抱有和他不一样的态度。我很期待这些活动。尤其是关于那三位假面骑士的事情。\n十年前的时候——顺便一提，我那个时候还是高中生——红色的（我知道他还有别的颜色的样子，但是大众对他的印象统一都是红色）假面骑士是唯一暴露了身份的假面骑士。其真实身份是警视厅特状课的泊进之介巡警。我听说，在那不久之后，他就调到了一课，很快便升职成为了巡查部长。其余的两位假面骑士，因其身份为普通市民，并没有曝露身份。不过，银色的那位之后因为敌人的阴谋，身份也一时间被公之于众。只是十年过去，除了像我这样的人，恐怕早已对这段记忆很是模糊。毕竟，那之后，关于银色假面骑士的消息被有意地封锁和抹去了。\n我却是清楚的。我清楚地记得那个时候，生命被那些——我并不想称之为怪物的Roidmude威胁的时候，到底是谁救了我。我记得Chase先生那张有些僵硬的脸，还有刚先生总是显得很不高兴的脸。我从中毒的昏迷中醒来的时候，见到的就是这两位对我来说十分重要的英雄。\n\n这十年来，我和刚先生断断续续地维持着联系。早些年的时候，我能感觉到他的心情总是有些沉重，尽管他努力地用一种轻松欢快的语气写下文字、或者与我通话，但是我刚和他认识时，结果他总是扯着嘴角，对着Chase先生冷嘲热讽，也总是心事重重，但他似乎对一切总保持了希望。那几年却是不一样的，他似乎……不，那不是我应该去评价的事情了。\n后来有一段时间，我有些联系不上他了。进之介先生主动联系了我。他是个十分温柔的人，他告诉我，刚先生有十分重要的、不得不做的事情，如果运气好的话，很快就会带着好消息回来。他拜托我，和他还有刚先生的姐姐雾子小姐一起祈祷吧。\n又过去了几年，为了纪念假面骑士为这个社会的稳定作出的贡献，在进之介先生的同意下，警视厅出了不少三人的周边，其中就有他们的拍立得——当然，刚先生和Chase先生的只有假面骑士的照片，本人却是不出现的。\n但是昨天，我打开刚先生寄来的，久违的信件的时候，里面掉出来两张拍立得，我拿起来，惊喜地看到了刚先生的笑容，还有Chase先生，他和十年前一点区别都没有。`,
 };
 
-// ✅ 全局变量记录当前选中的 tag
+// 全局变量
 let currentSelectedTag = null;
+let typingInterrupted = false;
+let pendingClick = null;
 
-let typingInterrupted = false;  // 控制是否跳过打字动画
-
-function preloadAllImagesThenShow(callback) {
-  const images = Array.from(document.querySelectorAll('.work-item img'));
-  let loaded = 0;
-
-  if (images.length === 0) {
-    finishLoading();
-    return;
-  }
-
-  images.forEach(img => {
-    const realSrc = img.dataset.src || img.src; // 支持已设置 src
-    const temp = new Image();
-    temp.onload = check;
-    temp.onerror = check;
-    temp.src = realSrc;
-  });
-
-  function check() {
-    loaded++;
-    if (loaded >= images.length) {
-      finishLoading();
-    }
-  }
-
-  function finishLoading() {
-    document.getElementById('loading-screen').style.display = 'none';
-    document.querySelector('.works-container').style.visibility = 'visible';
-    if (callback) callback();
-  }
-}
-
-// ✅ 筛选作品 & 添加时间标签
-window.onload = function () {
-  // 首先隐藏内容，显示 loading
-  document.querySelector('.works-container').style.visibility = 'hidden';
-  document.getElementById('loading-screen').style.display = 'flex';
-
-  // 等所有作品图片加载完成后执行主逻辑
-  preloadAllImagesThenShow(() => {
-    const hash = window.location.hash;
-    const selectedTag = hash.startsWith("#tag=") ? decodeURIComponent(hash.slice(5)) : null;
-    currentSelectedTag = selectedTag;
-    console.log("选中的 tag:", selectedTag);
-
-    document.querySelectorAll('.work-item').forEach(item => {
-      let tags = [];
-      try {
-        tags = JSON.parse(item.dataset.tags);
-        console.log("此项的 tags:", tags);
-      } catch (e) {
-        console.error('data-tags 格式错误：', item.dataset.tags);
-      }
-
-      if (!selectedTag || tags.map(t => t.trim()).includes(selectedTag.trim())) {
-        item.style.display = 'block';
-
-        // ✅ 添加时间标签（仅对特定 tag）
-        if (selectedTag === '「刚切中元节24h」「夢廻の町」') {
-          const id = item.dataset.id || '';
-          if (id.startsWith('1-') && !item.querySelector('.time-label')) {
-            const parts = id.split('-');
-            if (parts.length >= 3) {
-              const hour = parts[1].padStart(2, '0');
-              const min = parts[2].padStart(2, '0');
-              const time = `${hour}:${min}`;
-              const timeLabel = document.createElement('div');
-              timeLabel.className = 'time-label';
-              timeLabel.textContent = time;
-              item.appendChild(timeLabel);
-            }
-          }
-        }
-
-      } else {
-        item.style.display = 'none';
-      }
-    });
-
-    // ✅ 显示页面主体，隐藏 loading
-    document.querySelector('.works-container').style.visibility = 'visible';
-    document.getElementById('loading-screen').style.display = 'none';
-
-    // ✅ 执行原本回调
-    checkVisibleItems();
-  });
-};
-
-
-
-// ✅ 弹窗逻辑
 const popup = document.querySelector(".work-popup");
 const popupImg = popup.querySelector(".popup-img");
 const textIcon = document.getElementById('text-icon');
@@ -140,23 +50,168 @@ let textVisible = false;
 let currentTags = [];
 let currentId = '';
 
-// ✅ 作品点击事件
+// 上传图片预加载
+function preloadAllImagesThenShow(callback) {
+  const images = Array.from(document.querySelectorAll('.work-item img'));
+  let loaded = 0;
+  const total = images.length;
 
-document.querySelectorAll('.work-item').forEach(item => {
-  item.addEventListener('click', () => {
-    currentGroup = JSON.parse(item.dataset.images);
-    currentTags = JSON.parse(item.dataset.tags);
-    currentId = item.dataset.id;
-    currentIndex = 0;
-    showImage();
-    popup.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    textVisible = false;
-    textBox.classList.remove('active');
-    textIcon.classList.remove('active');
+  if (total === 0) {
+    callback();
+    return;
+  }
+
+  images.forEach(img => {
+    const realSrc = img.dataset.src || img.src;
+    const temp = new Image();
+    temp.onload = check;
+    temp.onerror = check;
+    temp.src = realSrc;
+  });
+
+  function check() {
+    loaded++;
+    if (loaded >= total) {
+      callback();
+    }
+  }
+}
+
+// 显示大图弹窗函数，只在确认为成年人后调用
+function showPopupForItem(item) {
+  currentGroup = JSON.parse(item.dataset.images);
+  currentTags = JSON.parse(item.dataset.tags);
+  currentId = item.dataset.id;
+  currentIndex = 0;
+  showImage();
+  popup.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  textVisible = false;
+  textBox.classList.remove('active');
+  textIcon.classList.remove('active');
+}
+
+// ✅ 年龄确认按钮逻辑
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('age-confirm-overlay');
+  const btnYes = document.getElementById('age-yes');
+  const btnNo = document.getElementById('age-no');
+
+  btnYes.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    if (pendingClick) {
+      showPopupForItem(pendingClick);
+      pendingClick = null;
+    }
+  });
+
+  btnNo.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    pendingClick = null;
   });
 });
 
+window.onload = function () {
+  const worksContainer = document.querySelector('.works-container');
+  const loadingScreen = document.getElementById('loading-screen');
+
+  worksContainer.style.visibility = 'hidden';
+  loadingScreen.style.display = 'flex';
+
+  preloadAllImagesThenShow(() => {
+    const hash = window.location.hash;
+    const selectedTag = hash.startsWith("#tag=") ? decodeURIComponent(hash.slice(5)) : null;
+    currentSelectedTag = selectedTag;
+
+    document.querySelectorAll('.work-item').forEach(item => {
+      let tags = [];
+      try {
+        tags = JSON.parse(item.dataset.tags);
+      } catch {
+        tags = [];
+      }
+
+      const matchesTag = !selectedTag || tags.map(t => t.trim()).includes(selectedTag.trim());
+      if (!matchesTag) {
+        item.style.display = 'none';
+        return;
+      }
+
+      item.style.display = 'block';
+      const hasRorG = tags.includes("R向") || tags.includes("G向");
+
+      if (hasRorG) {
+        item.classList.add('blurred');
+
+        const img = item.querySelector('img');
+        if (img && !item.querySelector('.blur-wrapper')) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'blur-wrapper';
+          img.replaceWith(wrapper);
+          wrapper.appendChild(img);
+        }
+
+        if (!item.querySelector('.warning-icons')) {
+          const iconContainer = document.createElement('div');
+          iconContainer.className = 'warning-icons';
+
+          const teenIcon = document.createElement('img');
+          teenIcon.src = '/iconfont/Teenager.png';
+          teenIcon.className = 'icon-teen';
+
+          const warnIcon = document.createElement('img');
+          warnIcon.src = '/iconfont/Warning.png';
+          warnIcon.className = 'icon-warn';
+
+          iconContainer.appendChild(teenIcon);
+          iconContainer.appendChild(warnIcon);
+          item.appendChild(iconContainer);
+        }
+
+        if (!item.classList.contains('click-bound')) {
+          item.classList.add('click-bound');
+          item.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            pendingClick = item;
+            document.getElementById('age-confirm-overlay').style.display = 'flex';
+          });
+        }
+      } else {
+        if (!item.classList.contains('click-bound')) {
+          item.classList.add('click-bound');
+          item.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            showPopupForItem(item);
+          });
+        }
+      }
+
+      if (selectedTag === '「刚切中元节24h」「夢廻の町」') {
+        const id = item.dataset.id || '';
+        if (id.startsWith('1-') && !item.querySelector('.time-label')) {
+          const parts = id.split('-');
+          if (parts.length >= 3) {
+            const hour = parts[1].padStart(2, '0');
+            const min = parts[2].padStart(2, '0');
+            const time = `${hour}:${min}`;
+            const timeLabel = document.createElement('div');
+            timeLabel.className = 'time-label';
+            timeLabel.textContent = time;
+            item.appendChild(timeLabel);
+          }
+        }
+      }
+    });
+
+    worksContainer.style.visibility = 'visible';
+    loadingScreen.style.display = 'none';
+    checkVisibleItems();
+  });
+};
+
+// ✅ 大图弹窗内逻辑
 function showImage() {
   popupImg.onload = () => {
     const imgRatio = popupImg.naturalWidth / popupImg.naturalHeight;
@@ -191,15 +246,10 @@ popupImg.addEventListener('click', (e) => {
   textVisible = false;
 });
 
-textIcon.addEventListener('click', () => {
-  if (!textVisible) {
-    const full = descriptions[currentId] || '';
-    typeText(full);
-    textBox.classList.add('active');
-    textIcon.classList.add('active');
-    imageContainer.classList.add('image-slide-left');
-    textVisible = true;
-  } else {
+popup.addEventListener('click', (e) => {
+  if (!popupImg.contains(e.target) && !textIcon.contains(e.target) && !textBox.contains(e.target)) {
+    popup.style.display = 'none';
+    document.body.style.overflow = '';
     textBox.classList.remove('active');
     textIcon.classList.remove('active');
     imageContainer.classList.remove('image-slide-left');
@@ -362,9 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   textBox.addEventListener('click', () => {
-  if (textVisible) {
-    typingInterrupted = true;
-  }
-});
+    if (textVisible) {
+      typingInterrupted = true;
+    }
+  });
 
 });
