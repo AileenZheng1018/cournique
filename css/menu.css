@@ -108,6 +108,13 @@ html, body {
 
 h1 {
   margin-bottom: 2rem;
+  color: white;
+  font-family: 'FusionPixelCN', monospace;
+  font-size: 36px;
+  text-shadow: 0 0 6px #00ffe0;
+  left: 30px;
+  top: 10px;
+  position: relative;
 }
 
 .novel-list {
