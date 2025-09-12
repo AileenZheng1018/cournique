@@ -294,6 +294,21 @@ body {
   text-shadow: 0 0 6px #ff4e4e;
 }
 
+.menu-link {
+  margin: 8px 0 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #cdecec;
+  transition: color 0.3s;
+  font-family: 'FusionPixelCN', monospace;
+  text-decoration: none;
+}
+
+.menu-link:hover {
+  color: #ff4e4e;
+  text-shadow: 0 0 6px #ff4e4e;
+}
+
 /* 返回按钮样式 */
 .menu-back {
   position: absolute;
