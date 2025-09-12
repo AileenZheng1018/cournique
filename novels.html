@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <title>小说</title>
-  <link rel="stylesheet" href="css/novels.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <title>小说</title>
+    <link rel="stylesheet" href="css/novels.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    
+    <div id="current-tag" class="current-tag-label"></div>
+    
+    <div class="background-container">
+      <img src="lab_bg.jpg" class="background-img" alt="Lab Background" />
+    
+      <!-- Go -->
+      <div class="face-area" style="top: 12.4%; left: 36.2%;">
+        <div class="face-highlight"></div>
+        <div class="face-info">
+          <p>Target: Go Shijima</p>
+          <p>Species: Homo Sapiens</p>
+          <p>Gender: M</p>
+          <p>Mood: panic stressful</p>
+        </div>
+      </div>
+    
+      <!-- Chase -->
+      <div class="face-area" style="top: 33.2%; left: 60.4%;">
+        <div class="face-highlight"></div>
+        <div class="face-info">
+          <p>Target: Chase</p>
+          <p>Species: Roidmude</p>
+          <p>Gender: N/A</p>
+          <p>Mood: joy</p>
+        </div>
+      </div>
+    </div>
+    
   <h1>小说·目录</h1>
   <div class="novel-list">
     <a href="novels/bon-appetit/index.html" class="novel-item">
@@ -13,6 +43,9 @@
       <p class="summary">就像是被雨浸透、被雨打湿，从雨中诞生又化归于雨。<br>他一头扎进雏菊里。</p>
     </a>
   </div>
+  
+  <a href="/" class="back-button">← 返<br>回  </a>
+  
   <script src="js/novels.js"></script>
 </body>
 </html>
