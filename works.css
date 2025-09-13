@@ -580,3 +580,47 @@ body.popup-open {
 .confirm-buttons button:hover {
   background: #666;
 }
+
+.work-item[data-id^="novel-"] {
+  display: inline-block;
+  break-inside: avoid;      /* ⬅ 防止被拆到两列之间 */
+  background: rgba(20, 24, 28, 0.6);
+  color: #e6edf3;
+  padding: 20px;
+  margin: 4px;               /* ⬅ 与其他卡片间隔一致 */
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-sizing: border-box;   /* ⬅ 包含内边距计算宽度 */
+  cursor: pointer;
+  vertical-align: top;      /* ⬅ 防止卡片底部错位 */
+  position: relative;
+  padding: 6px;
+  box-shadow: 0 0 12px rgba(0, 255, 224, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  /* 移除固定宽度！*/
+  width: auto;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.work-item[data-id^="novel-"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 224, 0.3);
+}
+
+.work-item[data-id^="novel-"] .title {
+  font-family: 'FusionPixelCN', monospace;
+  font-size: 18px;
+  margin-bottom: 12px;
+  text-align: center;
+  word-break: break-word;   /* ⬅ 避免长标题撑破 */
+}
+
+.work-item[data-id^="novel-"] .preview {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #a9b6c3;
+  text-align: center;
+  word-break: break-word;   /* ⬅ 避免溢出 */
+}

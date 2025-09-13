@@ -418,3 +418,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.work-item[data-id^="novel-"]').forEach(item => {
+    item.addEventListener('click', () => {
+      const url = item.getAttribute('data-link');
+      if (url) {
+        window.location.href = url;
+      }
+    });
+  });
+});
