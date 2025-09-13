@@ -33,7 +33,7 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;          /* ✅ 保证在最底层 */
+  z-index: 1;    
   overflow: hidden;
 }
 
@@ -49,7 +49,8 @@ html, body {
   position: absolute;
   width: 8%;
   aspect-ratio: 1 / 1;
-  pointer-events: none;
+  pointer-events: auto;
+  z-index: 10;
 }
 
 .face-highlight {
@@ -114,10 +115,12 @@ h1 {
   text-shadow: 0 0 6px #00ffe0;
   left: 30px;
   top: 10px;
-  position: relative;
+  position: fixed;
+  z-index: 2;
 }
 
 .novel-list {
+  margin: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
