@@ -169,33 +169,37 @@ body {
   align-items: center;
   gap: 22px;
   padding: 2rem 0;
+  font-family: 'FusionPixelCN', monospace, sans-serif;
 }
 
 .chapter-list a {
+  font-family: 'FusionPixelCN', monospace, sans-serif;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;          /* ⬅ 初始居中 */
-  justify-content: center;      /* ⬅ 初始居中 */
+  align-items: center;
+  justify-content: center;
 
   width: 240px;
   height: 54px;
   padding: 0 24px;
+  overflow: hidden;                  /* ⬅ 必须有！确保伪元素不干扰排版 */
 
   color: #e6edf3;
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
   border-radius: 14px;
-  background: rgba(20, 24, 28, 0.55);
-  position: relative;
-  overflow: hidden;
-  transition:
-    width .35s ease, height .35s ease,
-    box-shadow .35s ease, background .35s ease,
-    padding .35s ease, transform .3s ease;
+  background: rgba(20,24,28,.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  font-size: 16px;
-  font-family: 'FusionPixelCN', monospace;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  transition:
+    width .40s cubic-bezier(.3,.7,.4,1.2),
+    height .40s cubic-bezier(.3,.7,.4,1.2),
+    padding .35s ease,
+    background .25s ease,
+    box-shadow .25s ease,
+    transform .25s ease;
 }
 
 .chapter-list a .title {
@@ -203,6 +207,7 @@ body {
   color: #e6edf3;
   text-align: center;
   transition: all .3s ease;
+  font-family: 'FusionPixelCN', monospace, sans-serif;
 }
 
 .chapter-list a .preview {
@@ -225,61 +230,114 @@ body {
   transition: opacity .35s ease, max-height .35s ease, margin-top .35s ease;
 }
 
-/* hover状态 */
-.chapter-list a:hover {
-  width: 580px;
-  height: 120px;
-  padding: 20px 22px;                  /* ⬅ 给上下留足空间 */
-  align-items: center;                 /* ⬅ 水平居中 */
-  justify-content: flex-start;         /* ⬅ 顶部对齐 */
-  box-shadow: 0 0 20px rgba(0,255,224,0.35);
-  background: rgba(28, 34, 40, 0.8);
+/* ---------- hover 展开：上靠齐 + 预览出现 ---------- */
+.chapter-list a:hover{
+  width: 580px;              /* 横向拉长 */
+  height: 120px;             /* 纵向拉高 */
+  padding: 20px 22px;
+  justify-content: flex-start;  /* 顶部对齐 */
+  align-items: center;          /* 仍保持水平居中 */
+  gap: 0px;                    /* 标题与预览的自然间距 */
+
+  background: rgba(28,34,40,.82);
+  box-shadow: 0 12px 28px rgba(0,0,0,.45);
   transform: translateY(-2px);
 }
 
+.chapter-list a:hover .preview{
+  opacity: 1;
+  max-height: 100px;
+}
+
+/* ========= 电光刃 Hover 动画 ========= */
+
+.chapter-list a {
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-list a::before,
+.chapter-list a::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 底边电光刃 */
+.chapter-list a::before {
+  bottom: 0;
+  left: 100%;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #00ffe0, #00ffe0 60%, transparent 100%);
+  box-shadow: 0 0 6px #00ffe0, 0 0 12px #00ffe0;
+}
+
+/* 右侧电光刃 */
+.chapter-list a::after {
+  bottom: -100%;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #00ffe0, #00ffe0 60%, transparent 100%);
+  box-shadow: 0 0 6px #00ffe0, 0 0 12px #00ffe0;
+}
+
+/* Hover 动画触发 */
+.chapter-list a:hover {
+  width: 580px;
+  height: 120px;
+  padding: 20px 22px;
+  justify-content: flex-start;
+  align-items: center;
+  background: rgba(28, 34, 40, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(0, 255, 224, 0.25);
+}
+
 .chapter-list a:hover .title {
-  margin-bottom: 10px;                /* ⬅ 和 preview 拉开距离 */
+  margin-bottom: 10px;
 }
 
 .chapter-list a:hover .preview {
   opacity: 1;
   max-height: 100px;
-  margin-top: 20px;                     /* ⬅ 贴近 title，避免底部太空 */
+  margin-top: 16px;
 }
 
-/* 发光线条（右边 & 底边） */
-.chapter-list a::before,
-.chapter-list a::after {
-  content: "";
-  position: absolute;
-  background: linear-gradient(90deg, transparent, #00ffe0 50%, transparent);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s ease;
-}
-
-.chapter-list a::before {
-  bottom: 0; left: 0; height: 2px; width: 100%;
-  background: linear-gradient(90deg, transparent, #00ffe0, transparent);
-}
-
-.chapter-list a::after {
-  top: 0; right: 0; width: 2px; height: 100%;
-  background: linear-gradient(180deg, transparent, #00ffe0, transparent);
-}
-
+/* 让电光刃出现并播放动画 */
 .chapter-list a:hover::before,
 .chapter-list a:hover::after {
   opacity: 1;
-  animation: spark .8s infinite linear;
+  animation: slash-h 0.5s linear forwards, spark-flicker 0.5s linear;
 }
 
-/* 电流滋啦动画（右侧+底边） */
-@keyframes spark {
-  0% { filter: drop-shadow(0 0 1px #00ffe0); }
-  50% { filter: drop-shadow(0 0 6px #00ffe0); }
-  100% { filter: drop-shadow(0 0 1px #00ffe0); }
+/* 横向划开 */
+@keyframes slash-h {
+  0% { left: 100%; }
+  100% { left: 0%; }
 }
+
+/* 竖向划开 */
+.chapter-list a:hover::after {
+  animation: slash-v 0.5s linear forwards, spark-flicker 0.5s linear;
+}
+
+@keyframes slash-v {
+  0% { bottom: -100%; }
+  100% { bottom: 0%; }
+}
+
+/* 电光闪烁抖动感 */
+@keyframes spark-flicker {
+  0%, 100% { filter: drop-shadow(0 0 1px #00ffe0); }
+  25% { filter: drop-shadow(0 0 4px #00ffe0); }
+  50% { filter: drop-shadow(0 0 8px #00ffe0); }
+  75% { filter: drop-shadow(0 0 4px #00ffe0); }
+}
+
+
 
 .back-button {
   position: fixed;

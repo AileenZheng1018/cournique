@@ -282,3 +282,37 @@ main.novel {
   text-decoration: none;
   user-select: none;
 }
+
+.chapter-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 3rem auto 1rem;
+  max-width: 760px;
+  gap: 12px;
+}
+
+.chapter-nav-bar .chapter-nav {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(20,24,28,.6);
+  color: #e6edf3;
+  border: 1px solid rgba(255,255,255,.08);
+  transition: background .25s, box-shadow .25s, transform .25s;
+  backdrop-filter: blur(6px);
+}
+
+.chapter-nav-bar .chapter-nav:hover {
+  background: rgba(28,34,40,.75);
+  box-shadow: 0 0 12px rgba(0,255,224,.4);
+  transform: translateY(-2px);
+}
+
+.chapter-nav-bar .chapter-nav.index {
+  flex: 0 0 auto;
+  min-width: 120px;
+}
+

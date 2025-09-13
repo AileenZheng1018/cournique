@@ -158,11 +158,23 @@ function renderSingleContentHtml(bodyText) {
 // 多章节 index.html（目录 + 悬停预览所需的片段）
 function renderMultiIndexHtml(title, summary, chapters) {
   const items = chapters.map(ch => {
-    const preview = (ch.text || '').replace(/\s+/g, ' ').slice(0, 120);
-    const label = ch.title || String(ch.index).padStart(2, '0');
-    const href = `chapter-${String(ch.index).padStart(2, '0')}.html`;
-    return `<li><a href="${href}" title="${escapeHtml(ch.title)}">${escapeHtml(label)}<span class="preview" aria-hidden="true">${escapeHtml(preview)}…</span></a></li>`;
+    const preview = (ch.text || '')
+      .replace(/\s+/g, ' ')
+      .slice(0, 120)
+      .trim();
+    const num = String(ch.index).padStart(2, '0');
+    const href = `chapter-${num}.html`;
+
+    return `
+      <li>
+        <a href="${href}">
+          <span class="title">${escapeHtml(num)}</span>
+          <span class="preview" aria-hidden="true">${escapeHtml(preview)}…</span>
+        </a>
+      </li>
+    `;
   }).join('\n');
+
 
   return `<!DOCTYPE html>
 <html lang="zh">
@@ -188,8 +200,14 @@ function renderMultiIndexHtml(title, summary, chapters) {
 }
 
 // 多章节 chapter-xx.html（纯静态，无 JS）
-function renderChapterHtml(novelTitle, chapterIndex, chapterTitle, text) {
-  const label = String(chapterIndex).padStart(2, '0');
+function renderChapterHtml(novelTitle, chapterIndex, chapterTitle, text, totalChapters) {
+  const prev = chapterIndex > 1
+    ? `<a class="chapter-nav prev" href="chapter-${String(chapterIndex - 1).padStart(2, '0')}.html">← 上一章</a>`
+    : '';
+  const next = chapterIndex < totalChapters
+    ? `<a class="chapter-nav next" href="chapter-${String(chapterIndex + 1).padStart(2, '0')}.html">下一章 →</a>`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -206,8 +224,13 @@ function renderChapterHtml(novelTitle, chapterIndex, chapterTitle, text) {
     <div id="novel-content">
       ${blocksToParagraphs(text)}
     </div>
+
+    <div class="chapter-nav-bar">
+      ${prev}
+      <a class="chapter-nav index" href="./">返回目录</a>
+      ${next}
+    </div>
   </main>
-  <a href="./" class="back-button">← 返<br>回</a>
 </body>
 </html>`;
 }
@@ -274,10 +297,11 @@ function renderMetaJson(title, summary, chapters) {
       await fsp.writeFile(path.join(outDir, 'meta.json'), meta, 'utf8');
 
       for (const ch of chapters) {
-        const fname = `chapter-${String(ch.index).padStart(2, '0')}.html`;
-        const html = renderChapterHtml(defaultTitle, ch.index, ch.title, ch.text);
-        await fsp.writeFile(path.join(outDir, fname), html, 'utf8');
+      const fname = `chapter-${String(ch.index).padStart(2, '0')}.html`;
+      const html = renderChapterHtml(defaultTitle, ch.index, ch.title, ch.text, chapters.length);
+      await fsp.writeFile(path.join(outDir, fname), html, 'utf8');
       }
+
 
       console.log(`生成完成：多章节（${chapters.length} 章）`);
       console.log(' -', path.join(outDir, 'index.html'));
