@@ -145,7 +145,7 @@ function renderSingleIndexHtml(title, summary) {
     ${summary ? `<p class="novel-summary">${escapeHtml(summary)}</p>` : ''}
     <div id="novel-content" data-src="content.html"></div>
   </main>
-  <a href="/novels" class="back-button">← 返<br>回</a>
+  <button class="back-button" onclick="if (document.referrer) { history.back(); } else { location.href='/novels'; }">← 返<br>回</button>
 </body>
 </html>`;
 }
@@ -216,6 +216,7 @@ function renderChapterHtml(novelTitle, chapterIndex, chapterTitle, text, totalCh
   <link rel="stylesheet" href="/css/content.css">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="/js/back.js" defer></script>
 </head>
 <body>
   ${backgroundBlock()}
@@ -231,6 +232,7 @@ function renderChapterHtml(novelTitle, chapterIndex, chapterTitle, text, totalCh
       ${next}
     </div>
   </main>
+  <button class="back-button" onclick="if (document.referrer) { history.back(); } else { location.href='./'; }">← 返<br>回</button>
 </body>
 </html>`;
 }

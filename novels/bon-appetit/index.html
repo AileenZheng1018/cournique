@@ -2,18 +2,16 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>Bon Appétit</title>
-  <link rel="stylesheet" href="../../css/content.css">
+  <title>Bon Appetit</title>
+  <link rel="stylesheet" href="/css/guide.css">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="/js/novels.js" defer></script>
 </head>
 <body>
-    
-  <div id="current-tag" class="current-tag-label"></div>
-    
+  
   <div class="background-container">
-    <img src="../../lab_bg.jpg" class="background-img" alt="Lab Background" />
-    
+    <img src="/lab_bg.jpg" class="background-img" alt="Lab Background" />
     <!-- Go -->
     <div class="face-area" style="top: 12.4%; left: 36.2%;">
       <div class="face-highlight"></div>
@@ -24,7 +22,6 @@
         <p>Mood: panic stressful</p>
       </div>
     </div>
-    
     <!-- Chase -->
     <div class="face-area" style="top: 33.2%; left: 60.4%;">
       <div class="face-highlight"></div>
@@ -37,14 +34,10 @@
     </div>
   </div>
   <main class="novel single">
-    <h1 class="novel-title">Bon Appétit</h1>
-
-    <!-- 这里会由 novels.js 动态加载 content.html -->
+    <h1 class="novel-title">Bon Appetit</h1>
+    
     <div id="novel-content" data-src="content.html"></div>
   </main>
-
-  <a href="/novels" class="back-button">← 返<br>回  </a>
-  
-  <script src="../../js/novels.js" defer></script>
+  <button class="back-button" onclick="if (document.referrer) { history.back(); } else { location.href='/novels'; }">← 返<br>回</button>
 </body>
 </html>

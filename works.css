@@ -445,6 +445,11 @@ body.popup-open {
   user-select: none;
 }
 
+.back-button:hover {
+  text-shadow: 0 0 6px #ff4e4e;
+  transform: scale(1.05);
+}
+
 .time-label {
   position: absolute;
   top: 6px;

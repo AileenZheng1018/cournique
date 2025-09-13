@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="/css/content.css">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="/js/back.js" defer></script>
 </head>
 <body>
   
@@ -47,5 +48,6 @@
       <a class="chapter-nav next" href="chapter-07.html">下一章 →</a>
     </div>
   </main>
+  <button class="back-button" onclick="if (document.referrer) { history.back(); } else { location.href='./'; }">← 返<br>回</button>
 </body>
 </html>
