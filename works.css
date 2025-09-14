@@ -4,11 +4,12 @@ html, body {
   overflow-x: hidden;  /* ✅ 禁止横向滚动 */
 }
 
-img {
+.work-item img,
+.popup-img {
   user-drag: none;
   -webkit-user-drag: none;
   user-select: none;
-  pointer-events: none; /* 若图像不需交互可添加 */
+  pointer-events: none; /* ✅ 只禁用这些图 */
 }
 
 
@@ -312,8 +313,9 @@ body.popup-open {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  z-index: 10000;
-  cursor: pointer;
+  pointer-events: auto; /* ⬅ 允许点击 */
+  cursor: pointer;      /* ⬅ 鼠标样式 */
+  z-index: 10000;        /* ⬅ 保证浮在图片之上 */
 }
 
 .text-icon.active {
@@ -445,11 +447,6 @@ body.popup-open {
   user-select: none;
 }
 
-.back-button:hover {
-  text-shadow: 0 0 6px #ff4e4e;
-  transform: scale(1.05);
-}
-
 .time-label {
   position: absolute;
   top: 6px;
@@ -494,7 +491,7 @@ body.popup-open {
 /* ✅ 保持 .work-item 为相对定位容器 */
 .work-item {
   position: relative;
-  border-radius: 1rem;
+  border-radius: 10px;
   overflow: hidden;
 }
 
@@ -502,7 +499,7 @@ body.popup-open {
 .work-item .blur-wrapper {
   width: 100%;
   height: 100%;
-  border-radius: 1rem;
+  border-radius: 10px;
   overflow: hidden;
   position: relative;
 }
@@ -514,7 +511,7 @@ body.popup-open {
   object-fit: cover;
   filter: blur(20px);
   transform: scale(1);
-  border-radius: 1rem;
+  border-radius: 10px;
   pointer-events: none;
   transition: transform 0.3s ease;
 }

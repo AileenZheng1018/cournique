@@ -257,6 +257,23 @@ popup.addEventListener('click', (e) => {
   }
 });
 
+textIcon.addEventListener('click', () => {
+  if (!textVisible) {
+    const full = descriptions[currentId] || '';
+    typeText(full); // ✅ 永远传入完整文案
+    textBox.classList.add('active');
+    textIcon.classList.add('active');
+    imageContainer.classList.add('image-slide-left');
+    textVisible = true;
+  } else {
+    textBox.classList.remove('active');
+    textIcon.classList.remove('active');
+    imageContainer.classList.remove('image-slide-left');
+    textVisible = false;
+  }
+});
+
+
 function typeText(text) {
   textBox.innerHTML = '';
   typingInterrupted = false;
@@ -417,9 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-});
-
-document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.work-item[data-id^="novel-"]').forEach(item => {
     item.addEventListener('click', () => {
       const url = item.getAttribute('data-link');
@@ -429,3 +443,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
