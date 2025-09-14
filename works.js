@@ -438,7 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('click', () => {
       const url = item.getAttribute('data-link');
       if (url) {
-        window.location.href = url;
+        sessionStorage.setItem('returnTo', location.href);  // ⬅️ 记录来源页
+        window.location.href = url;                          // 跳到章节/内容页
       }
     });
   });
